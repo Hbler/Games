@@ -8,7 +8,7 @@
 # ---------------------------------------------------------------------
 
 def name_check():
-    '''Checks is there are numbers in the input.
+    '''Checks if there are numbers in the input.
     Breaks after three tries that contain numbers.'''
 
     t = 3
