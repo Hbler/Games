@@ -1,1 +1,2 @@
-# name_numbers
+# Games
+Games made in courses and personal projects
