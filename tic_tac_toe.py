@@ -1,3 +1,4 @@
+### Steps
 # create and display a board and a reference for input -ok
 # define win condition -ok
 # get first player's icon, validate it, update player order (list) -ok
@@ -10,7 +11,7 @@
 #   congratulate winner -ok
 #   check if players want rematch -ok
 #   refresh board -ok
-# else, repeat from get input
+# else, repeat from get input -ok
 
 ### Base Functions
 
@@ -211,3 +212,4 @@ while go:
             bp = update_board(play, bp)
             tc += 1
 
+### code by Hbler
