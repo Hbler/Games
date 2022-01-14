@@ -1,3 +1,4 @@
+### Pierian Data Udemy Course - Milestone 1 Project ###
 ### Steps
 # create and display a board and a reference for input -ok
 # define win condition -ok
