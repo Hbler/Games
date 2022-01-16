@@ -8,6 +8,9 @@ Here are the requirements:
     2 players should be able to play the game (both sitting at the same computer)
     The board should be printed out every time a player makes a move
     You should be able to accept input of the player position and then place a symbol on the board
+    
+    "Official" Slution: (jupyter notebook)
+    https://github.com/Pierian-Data/Complete-Python-3-Bootcamp/blob/master/04-Milestone%20Project%20-%201/03-Milestone%20Project%201%20-%20Complete%20Walkthrough%20Solution.ipynb
 '''
 
 ### Steps
