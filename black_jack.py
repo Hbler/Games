@@ -269,8 +269,8 @@ def first_table(house, player):
 
 def second_table(house, player):
 
-    house_display = 'House Cards: '
-    player_display = '\n Your Cards: '
+    house_display = f'House Cards: Total = {house.hand_total(house.hand)}'
+    player_display = f'\n Your Cards: Total = {player.hand_total(player.hand)}'
 
     for card in house.hand:
         house_display += '    ' + str(card)
