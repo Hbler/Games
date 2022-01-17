@@ -15,7 +15,7 @@ And most importantly:
     You must use OOP and classes in some portion of your game. You can not just use functions in your game. 
     Use classes to help you define the Deck and the Player's hand. There are many right ways to do this, so explore it well!
 
-“Original Solution”: (jupyter notebook)
+“Original Solution”: (is a jupyter notebook)
 https://github.com/Pierian-Data/Complete-Python-3-Bootcamp/blob/master/08-Milestone%20Project%20-%202/03-Milestone%20Project%202%20-%20Complete%20Walkthrough%20Solution.ipynb
 '''
 
