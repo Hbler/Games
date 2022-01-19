@@ -1,190 +1,176 @@
-# Creates two dictionaries from user name input:
-# 1. Names as _keys and and letter numbers (1..26) as _values (in a list)
-# 2. Names as _keys and and letter numbers (1..9) as _values (in a list)
-#   This values (1..9) represent the western/modern numerology_alphabet
+### Numerology ###
+### Steps
+# Create two dctionaries from the alphabet
+#   One A - Z = 1 - 26
+#   One A - Z = 1 - 9
+# Get a name from user
+# Condition the input and convert it in two corresponding dicts
+# Sum all values from each dict
+# Find digital root from each result
+# Present infos for user
 
-# -------
-# imports
-# -------
+### Imports
+from unicodedata import normalize
+import string
+import re
 
-from unicodedata import normalize # for accents removal
+### Functions
 
-# -------------------------------------------
-# ask for full name, test it, remove accents,
-# and make a list with all names as strings.
-# -------------------------------------------
+def get_name():
+    ''' Gets an input and checks if there are only letters'''
 
-def name_check():
-    '''Checks is there are numbers in the input.
-    Breaks after three tries that contain numbers.'''
+    done = False
 
-    t = 3
-    while t > 0:
-        name = raw_input('Enter your full name:\n - ')
+    while not done:
+        name = input('\nEnter your full name: ')
         if any(i.isdigit() for i in name):
-            t -= 1
-            print 'You have %d tries.' % t
-        elif t == 0:
-            print 'No more tries!'
-            break
+            print("\nSorry that's not a valid input. Try again.")
         else:
+            print('\nAlright! Thank You.')
+            done = True
             return name
 
-def split_string(s):
-    '''Creates a list of strings from a string (s) input.'''
+def condition_name(s):
+    ''' Removes any accented characters and pucntuation in a string and makes it lowercase (s)
+        returns a list '''
+    no_accents = normalize('NFKD', s).encode('ascii', 'ignore').decode('ascii').lower()
+    return re.findall(r'[^!.? ]+', no_accents)
 
-    n_list = s.split(' ')
-    return n_list
+def name_num_9(l):
 
-def remv_accent(s):
-    '''Removes any accented character in the string (s)'''
-
-    return normalize('NFKD', s.decode('utf-8')).encode('ascii', 'ignore')
-
-full_name = name_check()
-
-full_name_no_accents = remv_accent(full_name)
-
-names_ls = split_string(full_name_no_accents.lower())
-
-# -----------------------------------------
-# create letter - number dictionaries
-# -----------------------------------------
-
-alphabet = 'abcdefghijklmnopqrstuvwxyz'
-
-num_dict26 = {k:i for i,k in enumerate(alphabet, 1)}
-# dictionary with letters as _keys and numbers from 1..26 as _values
-
-def numerology_alphabet(s):
-    '''Creates a dictionary with the string letters as _keys
-    and numbers from 1..9 as _values'''
-
-    x = 1
-    n9_dict = dict()
-    for i in s:
-        n9_dict[i] = x
-        if x == 9:
-            x = 1
+    dict9 = dict()
+    val = 1
+    for i in string.ascii_lowercase:
+        dict9[i] = val
+        if val == 9:
+            val = 1
         else:
-            x += 1
-    return n9_dict
+            val += 1
 
-num_dict9 = numerology_alphabet(alphabet)
-# dictionary with letters as _keys and numbers from 1..9 as _values
+    new_dict = dict()
+    for item in range(len(l)):
+        for char in range(len(l[item])):
+            name = l[item]
 
-# -----------------------------------
-# convert names list in numeric lists
-# -----------------------------------
-
-def name_to_num_26(l):
-    '''Creates a dictionary with strings from a list (l) as _keys
-    and a list of numbers (1..26) representing each letter as _values
-    for each string.'''
-
-    n_dict = dict()
-
-    for i in range(len(l)):
-        for char in range(len(l[i])):
-            name = l[i]
-
-            if name in n_dict:
-                n_dict[name].append(num_dict26[name[char]])
+            if name in new_dict:
+                new_dict[name].append(dict9[name[char]])
             else:
-                n_dict[name] = [num_dict26[name[char]]]
+                new_dict[name] = [dict9[name[char]]]
+    return new_dict
 
-    return n_dict
+def name_num_26(l):
+    ''' Creates a dict with strings from a list (l) as _keys
+    and the corresponding number (1-26) as _value '''
 
-def name_to_num_9(l):
-    '''Creates a dictionary with strings from a list (l) as _keys
-    and a list of numbers (1..9) representing each letter as _values
-    for each string.'''
+    dict26 = {k:x for x,k in enumerate(string.ascii_lowercase, 1)}
+    
+    new_dict = dict()
 
-    n_dict = dict()
+    for item in range(len(l)):
+        for char in range(len(l[item])):
+            name = l[item]
 
-    for i in range(len(l)):
-        for char in range(len(l[i])):
-            name = l[i]
-
-            if name in n_dict:
-                n_dict[name].append(num_dict9[name[char]])
+            if name in new_dict:
+                new_dict[name].append(dict26[name[char]])
             else:
-                n_dict[name] = [num_dict9[name[char]]]
+                new_dict[name] = [dict26[name[char]]]
+    
+    return new_dict
 
-    return n_dict
+def sum_key(d):
+    ''' Sums the _values from a dictionary _key, an assign the result
+    to the same _key in a new dict. The _values must be a list or tuple of numbers '''
 
-name_dict26 = name_to_num_26(names_ls)
+    new_dict = dict()
 
-name_dict9 = name_to_num_9(names_ls)
+    for key in d:
+        new_dict[key] = sum(d[key])
+    
+    return new_dict
 
-# -------------------
-# derivatives numbers
-# -------------------
+def all_to_one(d):
+    ''' Sums all _values from a dictionary (d) '''
 
-def sum_dictionary_keys(d):
-    '''Sums a _value of a dictionary (d), and assingn the result to the same
-    _key in a new dictionary. The _value must be a list or tuple with numbers.'''
+    total = 0
 
-    sum_k = dict()
-
-    for k in d:
-        sum_k[k] = sum(d[k])
-
-    return sum_k
-
-sdk26 = sum_dictionary_keys(name_dict26)
-
-sdk9 = sum_dictionary_keys(name_dict9)
-
-def keys_to_one(d):
-    '''Sums the _values of the _keys in a dictionary (d) in variable (n).'''
-
-    n = 0
-
-    for k in d:
-        n += d[k]
-
-    return n
-
-kto26 = keys_to_one(sdk26)
-
-kto9 = keys_to_one(sdk9)
+    for key in d:
+        total += d[key]
+    
+    return total
 
 def digital_root(n):
-    '''Find the digital root of a number (n).'''
+    ''' Finds the digital root of anumber (n) '''
 
-    dig_rt = n - (9 * ((n - 1) / 9))
-    return dig_rt
+    return (n - 1) % 9 + 1 if n else 0
 
-dr26 = digital_root(kto26)
+def personality_num(d):
+    ''' According to numerology is a number calculeted by the value of the consonants in the first name '''
 
-dr9 = digital_root(kto9)
+    number = 0
+    vowels = ['a','e','i','o','u']
+    list_of_keys = list(d)
+    counter = 0
+    
+    for char in list_of_keys[0]:
+        if char not in vowels:
+            number += d[list_of_keys[0]][counter]
+        counter += 1
+        
+    return digital_root(number)
 
-# ----------------
-# printing results
-# ----------------
+def soul_num(d):
+    ''' According to numerology is a number calculeted by the value of the vowels in the full name '''
+    number = 0 
+    vowels = ['a','e','i','o','u']
+    
+    for key, value in d.items():
+        counter = 0
+        for char in key:
+            if char in vowels:
+                number += d[key][counter]
+            counter += 1
+    
+    return digital_root(number)
 
-print
-print full_name_no_accents
-print
-print names_ls
-print
 
-# number ranging from 1..26
-print name_dict26
-print
-print sdk26
-print
-print kto26
-print
-print dr26
-print
+### Execution
+# Get input
+user_name = get_name()
+# Condition name
+names_list = condition_name(user_name)
+# Create dicitionaries with values for each letter of each name
+name_dict_9 = name_num_9(names_list)
+name_dict_26  = name_num_26(names_list)
+# Sum the _values of each letter
+name_dict_sum_9 = sum_key(name_dict_9)
+name_dict_sum_26 = sum_key(name_dict_26)
+# Sum all values into one
+total9 = all_to_one(name_dict_sum_9)
+total26 = all_to_one(name_dict_sum_26)
+# Find the digital root of the numbers
+dgrt9 = digital_root(total9)
+dgrt26 = digital_root(total26)
+# Find personality and soul nubers
+p_num = personality_num(name_dict_9)
+s_num = soul_num(name_dict_9)
 
-# number ranging from 1..9
-print name_dict9
-print
-print sdk9
-print
-print kto9
-print
-print dr9
+# Present info to user
+print('\nHere are the results:')
+print(f'\nThe name: {user_name}')
+print('\n\tValue of each letter 1 - 9:')
+for pair in name_dict_9.items():
+    print(f'\t{pair[0]}: {pair[1]}')
+print(f'\n\tValue of each letter 1 - 26:')
+for pair in name_dict_26.items():
+    print(f'\t{pair[0]}: {pair[1]}')
+print('\nTotal of each name:')
+print(f'\n\t1 - 9:')
+for pair in name_dict_sum_9.items():
+    print(f'\t{pair[0]}: {pair[1]}')
+print(f'\n\t1 - 26:')
+for pair in name_dict_sum_26.items():
+    print(f'\t{pair[0]}: {pair[1]}')
+print('\nTotal of all names:')
+print(f"\n\t{user_name} \n\tin 1 - 9: {total9}\n\tin 1 - 26: {total26}")
+print(f'\tYour destiny number is: {dgrt26}\n\tYour personality number is: {p_num}\n\tYour soul number is: {s_num}')
+print('\n\n Learn more with a google search "Name numerology (one of the numbers above) meaning"')
